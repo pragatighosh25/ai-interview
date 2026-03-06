@@ -1,9 +1,7 @@
-import { PrismaClient } from "@prisma/client"
+import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import { NextResponse } from "next/server"
-
-const prisma = new PrismaClient()
 
 export async function POST(req: Request) {
 
@@ -17,15 +15,18 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "User not found" })
   }
 
-  const valid = await bcrypt.compare(password, user.password)
+  const validPassword = await bcrypt.compare(
+    password,
+    user.password
+  )
 
-  if (!valid) {
+  if (!validPassword) {
     return NextResponse.json({ error: "Invalid password" })
   }
 
   const token = jwt.sign(
     { userId: user.id },
-    "secret",
+    process.env.JWT_SECRET!,
     { expiresIn: "1d" }
   )
 

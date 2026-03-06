@@ -2,16 +2,18 @@
 
 import { useState } from "react"
 
-export default function Login() {
+export default function Signup() {
 
+  const [name,setName]=useState("")
   const [email,setEmail]=useState("")
   const [password,setPassword]=useState("")
 
-  const handleLogin = async () => {
+  const handleSignup = async () => {
 
-    const res = await fetch("/api/login",{
+    const res = await fetch("/api/signup",{
       method:"POST",
       body: JSON.stringify({
+        name,
         email,
         password
       })
@@ -19,7 +21,7 @@ export default function Login() {
 
     const data = await res.json()
 
-    localStorage.setItem("token",data.token)
+    console.log(data)
   }
 
   return (
@@ -27,7 +29,13 @@ export default function Login() {
 
       <div className="bg-gray-900 p-8 rounded-xl w-96">
 
-        <h1 className="text-2xl mb-6">Login</h1>
+        <h1 className="text-2xl mb-6">Signup</h1>
+
+        <input
+        placeholder="Name"
+        className="w-full p-3 mb-3 bg-gray-800"
+        onChange={(e)=>setName(e.target.value)}
+        />
 
         <input
         placeholder="Email"
@@ -43,9 +51,9 @@ export default function Login() {
         />
 
         <button
-        onClick={handleLogin}
+        onClick={handleSignup}
         className="bg-blue-600 w-full py-3 rounded">
-          Login
+          Signup
         </button>
 
       </div>
