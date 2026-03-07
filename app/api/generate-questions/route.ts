@@ -1,27 +1,45 @@
-import { NextResponse } from "next/server"
+import Groq from "groq-sdk";
+import { NextResponse } from "next/server";
+
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
+});
 
 export async function POST(req: Request) {
   try {
+    const { role } = await req.json();
 
-    const { role } = await req.json()
+    const response = await groq.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        {
+          role: "user",
+          content: `
+Generate 5 interview questions for a ${role} developer.
 
-    const questions = [
-      `What is ${role}?`,
-      `Explain closures in JavaScript.`,
-      `What is React reconciliation?`,
-      `What is the Virtual DOM?`,
-      `Difference between var, let, and const?`
-    ]
+Return ONLY a valid JSON array.
 
-    return NextResponse.json({ questions })
+Example format:
+["question1","question2","question3","question4","question5"]
 
+Rules:
+- Do not add explanations
+- Do not add numbering
+- Do not add text before or after the JSON
+`,
+        },
+      ],
+    });
+
+    return NextResponse.json({
+      questions: response.choices[0].message.content,
+    });
   } catch (error) {
-
-    console.error(error)
+    console.error(error);
 
     return NextResponse.json(
-      { error: "Failed to generate questions" },
-      { status: 500 }
-    )
+      { error: "AI generation failed" },
+      { status: 500 },
+    );
   }
 }

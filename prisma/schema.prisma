@@ -18,9 +18,9 @@ model User {
 }
 
 model InterviewSession {
-  id        String   @id @default(uuid())
+  id        String   @id @default(cuid())
   role      String
-  score     Float?
+  avgScore  Float
   createdAt DateTime @default(now())
 
   userId String
