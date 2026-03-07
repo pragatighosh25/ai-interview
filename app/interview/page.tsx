@@ -19,24 +19,23 @@ export default function InterviewPage() {
   //save interview
 
   async function saveInterview() {
-  const avgScore =
-    scores.reduce((a, b) => a + b, 0) / scores.length
+    const avgScore = scores.reduce((a, b) => a + b, 0) / scores.length;
 
-  await fetch("/api/save-interview", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      role,
-      questions,
-      answers,
-      scores,
-      avgScore,
-      userId: "ec255975-3197-40a4-a781-483d20f7c15b", // replace with session user later
-    }),
-  })
-}
+    await fetch("/api/save-interview", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        role,
+        questions,
+        answers,
+        scores,
+        avgScore,
+        userId: "ec255975-3197-40a4-a781-483d20f7c15b", // replace with session user later
+      }),
+    });
+  }
 
   // Start interview
   const startInterview = async () => {
@@ -83,15 +82,15 @@ export default function InterviewPage() {
   };
 
   // Next question
-  const nextQuestion =async () => {
+  const nextQuestion = async () => {
     setAnswer("");
     setFeedback("");
 
     if (currentIndex < questions.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      await saveInterview()
-    setFinished(true)
+      await saveInterview();
+      setFinished(true);
     }
   };
 
@@ -131,34 +130,23 @@ export default function InterviewPage() {
   if (finished) {
     return (
       <main className="min-h-screen bg-black text-white p-10">
-
-        <h1 className="text-4xl font-bold mb-8">
-          Interview Report
-        </h1>
+        <h1 className="text-4xl font-bold mb-8">Interview Report</h1>
 
         <div className="bg-gray-900 p-6 rounded-xl mb-8">
           <p className="mb-2">
             Questions Attempted: {attempted} / {total}
           </p>
 
-          <p className="mb-2">
-            Average Score: {avgScore} / 10
-          </p>
+          <p className="mb-2">Average Score: {avgScore} / 10</p>
 
-          <p className="text-green-400 font-semibold">
-            Remark: {remark}
-          </p>
+          <p className="text-green-400 font-semibold">Remark: {remark}</p>
         </div>
 
-        <h2 className="text-2xl mb-4">
-          Question Breakdown
-        </h2>
+        <h2 className="text-2xl mb-4">Question Breakdown</h2>
 
         <div className="space-y-4">
-
           {questions.map((q, i) => (
             <div key={i} className="bg-gray-900 p-4 rounded">
-
               <p className="font-semibold mb-2">
                 Q{i + 1}: {q}
               </p>
@@ -167,17 +155,12 @@ export default function InterviewPage() {
                 Your Answer: {answers[i] || "Not answered"}
               </p>
 
-              <p className="text-blue-400">
-                Score: {scores[i] || 0} / 10
-              </p>
-
+              <p className="text-blue-400">Score: {scores[i] || 0} / 10</p>
             </div>
           ))}
-
         </div>
 
         <div className="mt-10 flex gap-4">
-
           <button
             onClick={resetInterview}
             className="bg-blue-600 px-6 py-3 rounded"
@@ -191,9 +174,7 @@ export default function InterviewPage() {
           >
             Go to Dashboard
           </button>
-
         </div>
-
       </main>
     );
   }
@@ -201,24 +182,32 @@ export default function InterviewPage() {
   // MAIN INTERVIEW UI
   return (
     <main className="min-h-screen bg-black text-white p-10">
-
       {!started ? (
-
         <div className="space-y-4">
+          <div className="bg-gray-900 p-6 rounded-xl border border-gray-800">
+            <h2 className="text-xl font-semibold mb-6">Start an Interview</h2>
 
-          <h1 className="text-3xl font-bold">
-            Start Interview
-          </h1>
-
-          <select
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            className="bg-gray-800 p-3 rounded"
-          >
-            <option value="frontend">Frontend</option>
-            <option value="backend">Backend</option>
-            <option value="fullstack">Fullstack</option>
-          </select>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                "frontend",
+                "backend",
+                "fullstack",
+                "ai-ml",
+                "cybersecurity",
+                "data-analyst",
+                "devops",
+                "mobile",
+              ].map((role) => (
+                <button
+                  key={role}
+                  onClick={() => router.push(`/interview?role=${role}`)}
+                  className="bg-gray-800 hover:bg-gray-700 p-4 rounded-lg capitalize transition"
+                >
+                  {role.replace("-", " ")}
+                </button>
+              ))}
+            </div>
+          </div>
 
           <button
             onClick={startInterview}
@@ -226,20 +215,14 @@ export default function InterviewPage() {
           >
             Generate Questions
           </button>
-
         </div>
-
       ) : (
-
         <div>
-
           <h2 className="text-xl mb-4">
             Question {currentIndex + 1} / {questions.length}
           </h2>
 
-          <p className="mb-6">
-            {questions[currentIndex]}
-          </p>
+          <p className="mb-6">{questions[currentIndex]}</p>
 
           <textarea
             value={answer}
@@ -263,20 +246,13 @@ export default function InterviewPage() {
 
           {feedback && (
             <div className="mt-6 bg-gray-900 p-4 rounded">
-              <h3 className="font-bold mb-2">
-                AI Feedback
-              </h3>
+              <h3 className="font-bold mb-2">AI Feedback</h3>
 
-              <p className="whitespace-pre-wrap">
-                {feedback}
-              </p>
+              <p className="whitespace-pre-wrap">{feedback}</p>
             </div>
           )}
-
         </div>
-
       )}
-
     </main>
   );
 }
