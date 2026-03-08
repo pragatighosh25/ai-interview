@@ -8,7 +8,6 @@ export default function Home() {
     <main className="relative min-h-screen bg-black text-white overflow-hidden">
       <div className="absolute top-[-200px] left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-purple-600 opacity-20 blur-[150px]"></div>
 
-      <Navbar />
       <Hero />
       <Features />
       <Footer />

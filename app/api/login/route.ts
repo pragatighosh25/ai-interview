@@ -6,6 +6,7 @@ import { NextResponse } from "next/server"
 export async function POST(req: Request) {
 
   const { email, password } = await req.json()
+  
 
   const user = await prisma.user.findUnique({
     where: { email }
@@ -30,5 +31,9 @@ export async function POST(req: Request) {
     { expiresIn: "1d" }
   )
 
-  return NextResponse.json({ token })
+  return NextResponse.json({ 
+    token,
+    name: user.name,
+    userId: user.id
+   })
 }
