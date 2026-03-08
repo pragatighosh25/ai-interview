@@ -6,7 +6,7 @@ import Footer from "@/components/Footer"
 export default function Home() {
   return (
     <main className="relative min-h-screen bg-black text-white overflow-hidden">
-      <div className="absolute top-[-200px] left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-purple-600 opacity-20 blur-[150px]"></div>
+      <div className="absolute -top-50 left-1/2 -translate-x-1/2 w-200 h-200 bg-purple-600 opacity-20 blur-[150px]"></div>
 
       <Hero />
       <Features />

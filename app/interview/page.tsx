@@ -2,11 +2,16 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+
 
 export default function InterviewPage() {
   const router = useRouter();
+  const params = useSearchParams();
+const role = params.get("role") || "frontend";
 
-  const [role, setRole] = useState("frontend");
+ 
   const [questions, setQuestions] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answer, setAnswer] = useState("");
@@ -32,13 +37,14 @@ export default function InterviewPage() {
         answers,
         scores,
         avgScore,
-        userId: "ec255975-3197-40a4-a781-483d20f7c15b", // replace with session user later
+        userId: localStorage.getItem("userId")
       }),
     });
   }
 
   // Start interview
-  const startInterview = async () => {
+useEffect(() => {
+  async function generate() {
     const res = await fetch("/api/generate-questions", {
       method: "POST",
       headers: {
@@ -52,7 +58,10 @@ export default function InterviewPage() {
 
     setQuestions(parsedQuestions);
     setStarted(true);
-  };
+  }
+
+  generate();
+}, [role]);
 
   // Submit answer
   const submitAnswer = async () => {
@@ -182,41 +191,7 @@ export default function InterviewPage() {
   // MAIN INTERVIEW UI
   return (
     <main className="min-h-screen bg-black text-white p-10">
-      {!started ? (
-        <div className="space-y-4">
-          <div className="bg-gray-900 p-6 rounded-xl border border-gray-800">
-            <h2 className="text-xl font-semibold mb-6">Start an Interview</h2>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[
-                "frontend",
-                "backend",
-                "fullstack",
-                "ai-ml",
-                "cybersecurity",
-                "data-analyst",
-                "devops",
-                "mobile",
-              ].map((role) => (
-                <button
-                  key={role}
-                  onClick={() => router.push(`/interview?role=${role}`)}
-                  className="bg-gray-800 hover:bg-gray-700 p-4 rounded-lg capitalize transition"
-                >
-                  {role.replace("-", " ")}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <button
-            onClick={startInterview}
-            className="bg-blue-600 px-6 py-3 rounded"
-          >
-            Generate Questions
-          </button>
-        </div>
-      ) : (
+      {started && (
         <div>
           <h2 className="text-xl mb-4">
             Question {currentIndex + 1} / {questions.length}
@@ -243,6 +218,13 @@ export default function InterviewPage() {
           >
             Next Question
           </button>
+
+          <button
+  onClick={() => router.push("/dashboard")}
+  className="bg-red-600 px-6 py-3 rounded ml-4"
+>
+  Exit Interview
+</button>
 
           {feedback && (
             <div className="mt-6 bg-gray-900 p-4 rounded">

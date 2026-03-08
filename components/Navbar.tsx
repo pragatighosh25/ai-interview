@@ -7,30 +7,23 @@ export default function Navbar(){
 
   const router = useRouter()
 
+  const [token,setToken] = useState<string | null>(null)
   const [name,setName] = useState<string | null>(null)
-  const [loggedIn,setLoggedIn] = useState(false)
 
   useEffect(()=>{
 
-    const token = localStorage.getItem("token")
+    const storedToken = localStorage.getItem("token")
     const storedName = localStorage.getItem("name")
 
-    if(token){
-      setLoggedIn(true)
-      setName(storedName)
-    }
+    setToken(storedToken)
+    setName(storedName)
 
   },[])
 
   function logout(){
-
-  localStorage.clear()
-  setLoggedIn(false)
-  setName(null)
-
-  window.location.href = "/"
-
-}
+    localStorage.clear()
+    window.location.href = "/"
+  }
 
   return(
 
@@ -38,16 +31,34 @@ export default function Navbar(){
 
       <div className="max-w-6xl mx-auto flex justify-between items-center p-4">
 
+        {/* Logo */}
+
         <h1
-          className="font-bold text-lg cursor-pointer"
+          className="font-bold text-amber-50 text-xl cursor-pointer"
           onClick={()=>router.push("/")}
         >
-          AI Interview
+          AI Simulator
         </h1>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-6">
 
-          {loggedIn ? (
+          <button
+            onClick={()=>router.push("/")}
+            className="text-gray-300 hover:text-white cursor-pointer"
+          >
+            Home
+          </button>
+
+          {token && (
+            <button
+              onClick={()=>router.push("/dashboard")}
+              className="text-gray-300 cursor-pointer hover:text-white"
+            >
+              Dashboard
+            </button>
+          )}
+
+          {token ? (
             <>
               <span className="text-sm text-gray-400">
                 Hi {name}
@@ -55,7 +66,7 @@ export default function Navbar(){
 
               <button
                 onClick={logout}
-                className="bg-red-500 px-4 py-2 rounded"
+                className="bg-violet-500 text-gray-50 hover:bg-violet-600 px-4 py-2 rounded cursor-pointer"
               >
                 Logout
               </button>
