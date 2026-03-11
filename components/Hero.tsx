@@ -1,48 +1,80 @@
 "use client";
+
 import { useRouter } from "next/navigation";
-
-
+import { Button } from "@/components/ui/button";
+import { Sparkles, PlayCircle } from "lucide-react";
 
 export default function Hero() {
 
   const router = useRouter();
 
-function startInterview() {
-  const token = localStorage.getItem("token");
+  const startInterview = () => {
 
-  if (token) {
-    router.push("/dashboard");
-  } else {
-    router.push("/login");
-  }
-}
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      router.push("/dashboard");
+    } else {
+      router.push("/login");
+    }
+
+  };
+
   return (
-    <section className="text-center py-32 px-6">
-      <h1 className="text-6xl font-bold leading-tight">
-        Practice Interviews
-        <span className="bg-linear-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-          {" "}
-          with AI
-        </span>
-      </h1>
 
-      <p className="text-gray-400 mt-6 max-w-xl mx-auto">
-        Simulate real technical interviews and get AI-powered feedback to
-        improve faster.
-      </p>
+    <section className="bg-[#0B0F19] text-white py-32 px-6">
 
-      <div className="mt-8 flex justify-center gap-4">
-        <button
-          onClick={startInterview}
-          className="bg-blue-600 px-6 py-3 rounded cursor-pointer"
-        >
-          Start Interview
-        </button>
+      <div className="max-w-6xl mx-auto text-center">
 
-        <button className="border border-gray-700 px-6 py-3 rounded-lg">
-          View Demo
-        </button>
+        {/* Badge */}
+
+        <div className="inline-flex items-center gap-2 bg-[#111827] px-4 py-2 rounded-full text-sm text-[#9CA3AF] mb-8">
+          <Sparkles size={16} className="text-[#6366F1]" />
+          AI Powered Interview Practice
+        </div>
+
+        {/* Heading */}
+
+        <h1 className="text-5xl md:text-6xl font-bold leading-tight">
+
+          Practice Technical Interviews{" "}
+
+          <span className="bg-gradient-to-r from-[#6366F1] to-purple-400 bg-clip-text text-transparent">
+            with AI
+          </span>
+
+        </h1>
+
+        {/* Description */}
+
+        <p className="text-[#9CA3AF] mt-6 max-w-xl mx-auto text-lg">
+          Simulate real technical interviews, get instant AI feedback,
+          and track your improvement with performance analytics.
+        </p>
+
+        {/* Buttons */}
+
+        <div className="mt-10 flex justify-center gap-4">
+
+          <Button
+            onClick={startInterview}
+            className="bg-[#6366F1] hover:bg-indigo-500 text-white px-6 py-6 text-lg cursor-pointer transition"
+          >
+            Start Interview
+          </Button>
+
+          <Button
+            variant="outline"
+            className="border-gray-700 text-gray-300 hover:bg-[#111827] px-6 py-6 text-lg cursor-pointer flex items-center gap-2"
+          >
+            <PlayCircle size={18} />
+            View Demo
+          </Button>
+
+        </div>
+
       </div>
+
     </section>
   );
 }
