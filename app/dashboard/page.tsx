@@ -41,6 +41,7 @@ export default function Dashboard() {
     async function fetchHistory() {
       const res = await fetch("/api/interview-history");
       const data = await res.json();
+      console.log("history API:", data);
       setHistory(data);
     }
 
@@ -65,7 +66,7 @@ export default function Dashboard() {
             <h2 className="text-gray-400 text-sm">Average Score</h2>
 
             <p className="text-3xl font-bold mt-2">
-              {stats.averageScore.toFixed(1)}
+              {stats.averageScore?.toFixed(1) || "0.0"}
             </p>
           </div>
 
@@ -73,7 +74,7 @@ export default function Dashboard() {
             <h2 className="text-gray-400 text-sm">Best Score</h2>
 
             <p className="text-3xl font-bold mt-2">
-              {stats.bestScore.toFixed(1)}
+              {stats.bestScore?.toFixed(1) || "0.0"}
             </p>
           </div>
         </div>
@@ -122,7 +123,7 @@ export default function Dashboard() {
           <h2 className="text-xl font-semibold mb-6">Interview History</h2>
 
           <div className="space-y-3 max-h-87.5 overflow-y-auto pr-2">
-            {history.map((session: any) => {
+            {history?.map((session: any) => {
               const scores = session.answers.map((a: any) => a.score);
 
               const avg =

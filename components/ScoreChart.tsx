@@ -35,7 +35,7 @@ const orderedHistory = [...history].reverse()
         Score Progress
       </h2>
 
-      <div className="h-[250px]">
+      <div className="h-62.5">
 
         <ResponsiveContainer width="100%" height="100%">
 
